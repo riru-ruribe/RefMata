@@ -8,5 +8,7 @@
     "name": "riru ruribe",
     "url": "https://github.com/riru-ruribe"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [],
+  "dependencies": {}
 }
