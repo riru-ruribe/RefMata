@@ -54,7 +54,7 @@ public static class DiagnosticDescriptors
     public static readonly DiagnosticDescriptor E0006 = new(
         id: Category + nameof(E0006),
         title: "invalid attribute",
-        messageFormat: "'RefMata' attribute is not needed because fields does not have any attributes.",
+        messageFormat: "'RefMatable' attribute is not needed because fields does not have any attributes.",
         category: Category,
         defaultSeverity: DiagnosticSeverity.Error,
         isEnabledByDefault: true
@@ -72,7 +72,7 @@ public static class DiagnosticDescriptors
     public static readonly DiagnosticDescriptor W0001 = new(
         id: Category + nameof(W0001),
         title: "warning syntax",
-        messageFormat: "''OnValidateGen' method will be generated, call it with 'OnValidate' or add component 'OnValidateHook'.",
+        messageFormat: "''OnValidateGen' method will be generated, call it with 'OnValidate' or add component 'RefMataHook'.",
         category: Category,
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true

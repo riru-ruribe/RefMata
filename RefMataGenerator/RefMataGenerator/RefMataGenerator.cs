@@ -196,7 +196,7 @@ public sealed class RefMataGenerator : IIncrementalGenerator
             {
                 orderRule = LoadProcSuffix(field.Type.TypeKind == TypeKind.Array, t, orderRule);
                 var tmp = $$"""
-    {{member.Name}} = AssetDatabase.FindAssets("{{filter}}"{{searchInFolders}})
+        {{member.Name}} = AssetDatabase.FindAssets("{{filter}}"{{searchInFolders}})
             .Select(AssetDatabase.GUIDToAssetPath)
             .SelectMany(AssetDatabase.LoadAllAssetsAtPath)
             {{orderRule}};
@@ -246,8 +246,7 @@ using {{Ns}};{{nsSb}}
     : {{IReferenceable}}
     #endif
 {
-{{fieldSb}}
-    #if UNITY_EDITOR
+{{fieldSb}}    #if UNITY_EDITOR
     void {{IReferenceable}}.RunOnValidate(Component root)
     {
 {{implSb}}
@@ -278,8 +277,7 @@ using {{Ns}};{{nsSb}}
     : {{IHookable}}
     #endif
 {
-{{fieldSb}}
-    #if UNITY_EDITOR
+{{fieldSb}}    #if UNITY_EDITOR
     RefMataKinds {{IHookable}}.Kinds => {{string.Join(" | ", kindHashSet.Select(x => $"RefMataKinds.{x}"))}};
     readonly HashSet<string> labels = new HashSet<string>
     {
@@ -335,8 +333,7 @@ using {{Ns}};{{nsSb}}
                 var className = typeName.Contains('.') ? typeName?.Split('.').Last() : typeName;
                 className = ToFirstLower(className!);
 
-                if (fieldSb.Length > 0) fieldSb.AppendLine();
-                fieldSb.Append($"    [SerializeField] {typeName} {className}Required = default;");
+                fieldSb.AppendLine($"    [SerializeField] {typeName} {className}Required = default;");
 
                 if (implSb.Length > 0) implSb.AppendLine();
                 implSb.Append($"        {className}Required = GetComponent<{typeName}>();");
