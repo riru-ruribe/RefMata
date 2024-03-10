@@ -12,5 +12,12 @@
   "license": "MIT",
   "documentationUrl": "https://github.com/riru-ruribe/RefMata",
   "keywords": [],
-  "dependencies": {}
+  "dependencies": {},
+  "samples": [
+    {
+      "displayName": "Sample",
+      "description": "",
+      "path": "Samples~/RefMata"
+    }
+  ]
 }

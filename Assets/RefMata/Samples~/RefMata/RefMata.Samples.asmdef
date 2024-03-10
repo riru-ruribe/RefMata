@@ -1,0 +1,23 @@
+{
+    "name": "RefMata.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4db97cf7c8a574730ad0e59e93272439",
+        "GUID:e2b93a46ee0fa4a499b0c36e77596ed3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "riru.ruribe.colorobject",
+            "expression": "",
+            "define": "EXIST_COLOR_OBJECT"
+        }
+    ],
+    "noEngineReferences": false
+}

@@ -24,3 +24,7 @@ automatically set references to serializable fields.
 [Auto Implementation Details](Assets/RefMata/Documents/AutoImplementationDetails.md "Auto Implementation Details")
 
 [Import Post Process](Assets/RefMata/Documents/ImportPostProcess.md "Import Post Process")
+
+## other
+installing the following will increase the behavior of the sample.  
+[ColorObject](https://github.com/riru-ruribe/ColorObject "ColorObject")
