@@ -126,8 +126,7 @@ namespace RefMata
         static void GetHookable(string assetPath)
         {
             var monoScript = AssetDatabase.LoadAssetAtPath<MonoScript>(assetPath);
-            if (monoScript == null) return;
-            var type = monoScript.GetClass();
+            if (monoScript == null || monoScript.GetClass() is not Type type) return;
             // NOTE: if use reflection, it may not be possible or slow, so do the following.
             if (!type.GetInterfaces().Contains(HookableType) ||
                 Activator.CreateInstance(type) is not IRefMataHookable hookable ||
