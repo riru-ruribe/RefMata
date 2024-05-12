@@ -167,7 +167,11 @@ namespace RefMata
                 if (assetPath.AsSpan().EndsWith(Suffix.Script)) GetHookable(assetPath);
                 else GetLabels(assetPath);
 
-            if (hookLabels.Count <= 0) return;
+            if (hookLabels.Count <= 0)
+            {
+                isProgress = false;
+                return;
+            }
 
             // search for hook target.
             foreach (var path in AssetDatabase.FindAssets(RefMataHookable.Label)
