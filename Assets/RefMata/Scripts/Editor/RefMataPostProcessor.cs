@@ -51,31 +51,11 @@ namespace RefMata
         }
         const string ProgressBarTitle = nameof(RefMataPostProcessor);
         static readonly Type HookableType = typeof(IRefMataHookable);
-        const string IsCancelPostProcessOnStagingPrefabKey = "RefMata/IsCancelPostProcessOnStagingPrefab";
-        const string IsLogOnCancelKey = "RefMata/IsLogOnCancel";
         static readonly HashSet<string> fullNames = new(), hookLabels = new();
         static readonly HashSet<string> scenes = new(), prefabs = new(), scriptables = new();
         static readonly List<GameObject> sceneRootGos = new(64);
         static int sceneIndex;
         static bool sceneWait, isProgress;
-
-        [MenuItem(IsCancelPostProcessOnStagingPrefabKey)]
-        static void IsCancelOnStagingPrefab()
-        {
-            Menu.SetChecked(
-                IsCancelPostProcessOnStagingPrefabKey,
-                !Menu.GetChecked(IsCancelPostProcessOnStagingPrefabKey)
-            );
-        }
-
-        [MenuItem(IsLogOnCancelKey)]
-        static void IsLogOnCancel()
-        {
-            Menu.SetChecked(
-                IsLogOnCancelKey,
-                !Menu.GetChecked(IsLogOnCancelKey)
-            );
-        }
 
         [MenuItem("Assets/RefMata/Add Label/Hookable", false, 100)]
         static void AddLabelHookable()
@@ -170,10 +150,10 @@ namespace RefMata
             prefabs.Clear();
             scriptables.Clear();
 
-            if (Menu.GetChecked(IsCancelPostProcessOnStagingPrefabKey) &&
+            if (CancelPostProcessOnStagingPrefab.IsOn &&
                 PrefabStageUtility.GetCurrentPrefabStage() != null)
             {
-                if (Menu.GetChecked(IsLogOnCancelKey))
+                if (LogOnCancel.IsOn)
                     Debug.LogWarning("cancel RefMata post process because staging prefab.");
                 isProgress = false;
                 return;
