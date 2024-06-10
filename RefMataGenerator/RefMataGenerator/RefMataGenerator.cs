@@ -26,6 +26,7 @@ public sealed class RefMataGenerator : IIncrementalGenerator
     const string AtrSearchDisp = Ns + "." + AtrSearch;
 
     const string GenericApi = "System.Collections.Generic";
+    const string SerializeFieldDisp = "UnityEngine.SerializeField";
     const string SerializeReferenceDisp = "UnityEngine.SerializeReference";
     const string RequireComponentDisp = "UnityEngine.RequireComponent";
     const string CmpDisp = "UnityEngine.Component";
@@ -121,6 +122,8 @@ public sealed class RefMataGenerator : IIncrementalGenerator
             if (member is not IFieldSymbol field) continue;
 
             if (member is IPropertySymbol) continue;
+
+            if (IsIgnoreField(field)) continue;
 
             if (field.Type.ToString().Contains(GenericApi))
             {
@@ -450,6 +453,22 @@ using {{Ns}};{{nsSb}}
             gameObject.AddComponent<RefMataHook>();
     }
 """;
+    }
+
+    static bool IsIgnoreField(IFieldSymbol field)
+    {
+        var ignore = true;
+        foreach (var atr in field.GetAttributes())
+        {
+            var name = atr!.AttributeClass!.ToDisplayString();
+            if (name.Contains(nameof(NonSerializedAttribute)))
+                return false;
+            else if (name == SerializeFieldDisp)
+                ignore = false;
+            else if (name == SerializeReferenceDisp)
+                ignore = false;
+        }
+        return ignore;
     }
 
     static string PostAtr()
