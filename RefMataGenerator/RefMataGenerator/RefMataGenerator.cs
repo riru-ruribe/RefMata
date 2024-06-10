@@ -120,6 +120,8 @@ public sealed class RefMataGenerator : IIncrementalGenerator
         {
             if (member is not IFieldSymbol field) continue;
 
+            if (member is IPropertySymbol) continue;
+
             if (field.Type.ToString().Contains(GenericApi))
             {
                 context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.E0004, typeNode.Identifier.GetLocation(), typeSymbol.Name));
