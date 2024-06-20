@@ -107,7 +107,7 @@ namespace RefMata
             var di = Directory.GetParent(assetPath);
             while (di != null)
             {
-                var fullName = di.FullName;
+                var fullName = di.FullName.Replace("\\", "/");
                 if (fullNames.Contains(fullName)) return;
                 if (fullName.AsSpan().IndexOf(IndexOfValue) is int indexOf and > 0)
                 {
