@@ -222,6 +222,7 @@ namespace RefMata
                 EditorUtility.ClearProgressBar();
                 AssetDatabase.SaveAssets();
                 EditorSceneManager.OpenScene(currentScenePath);
+                OnFinalize();
                 isProgress = false;
             });
         }
@@ -291,5 +292,10 @@ namespace RefMata
         /// please implement if you have any additional assets to hook.
         /// </summary>
         static partial void RunAdditionalAssets();
+
+        /// <summary>
+        /// please implement if you have any finalize processes.
+        /// </summary>
+        static partial void OnFinalize();
     }
 }
