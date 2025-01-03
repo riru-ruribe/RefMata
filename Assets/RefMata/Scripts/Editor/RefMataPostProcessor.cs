@@ -35,7 +35,6 @@ namespace RefMata
             }
         }
 
-        const string LabelPrefix = "RefMata";
         sealed class RefMataHookable
         {
             public const string Name = nameof(RefMataHookable);
@@ -95,7 +94,7 @@ namespace RefMata
                     }
                 }
                 Debug.Log(name);
-                AssetDatabase.SetLabels(o, new[] { $"{LabelPrefix}{name}" });
+                AssetDatabase.SetLabels(o, new[] { $"{RefMataKeywords.Name}{name}" });
                 EditorUtility.SetDirty(o);
             }
             AssetDatabase.SaveAssets();
@@ -114,7 +113,7 @@ namespace RefMata
                     fullNames.Add(fullName);
                     hookLabels.UnionWith(
                         AssetDatabase.GetLabels(AssetImporter.GetAtPath(fullName.Substring(indexOf)))
-                            .Where(x => x.AsSpan().StartsWith(LabelPrefix))
+                            .Where(x => x.AsSpan().StartsWith(RefMataKeywords.Name))
                     );
                     di = di.Parent;
                     continue;
