@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -31,6 +30,8 @@ public sealed class RefMataGenerator : IIncrementalGenerator
     const string RequireComponentDisp = "UnityEngine.RequireComponent";
     const string CmpDisp = "UnityEngine.Component";
     const string SoDisp = "UnityEngine.ScriptableObject";
+    const string GameObjectDisp = "UnityEngine.GameObject";
+    const string TransformDisp = "UnityEngine.Transform";
     const string IReferenceable = "IRefMataReferenceable";
     const string IHookable = "IRefMataHookable";
 
@@ -125,7 +126,8 @@ public sealed class RefMataGenerator : IIncrementalGenerator
 
             if (IsIgnoreField(field)) continue;
 
-            if (field.Type.ToString().Contains(GenericApi))
+            var fieldTypeStr = field.Type.ToString();
+            if (fieldTypeStr.Contains(GenericApi))
             {
                 context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.E0004, typeNode.Identifier.GetLocation(), typeSymbol.Name));
                 return;
@@ -171,7 +173,8 @@ public sealed class RefMataGenerator : IIncrementalGenerator
             if (implSb.Length > 0) implSb.AppendLine();
             var pre = isComponent ? "" : "root.";
             var isAry = field.Type.TypeKind == TypeKind.Array;
-            var t = field.Type.ToString().Replace("[]", "");
+            var isGameObject = fieldTypeStr.Contains(GameObjectDisp);
+            var t = fieldTypeStr.Replace("[]", "");
             if (isMe)
             {
                 kindHashSet.Add(RefMataKinds.Me);
@@ -180,7 +183,11 @@ public sealed class RefMataGenerator : IIncrementalGenerator
             else if (isChild)
             {
                 kindHashSet.Add(RefMataKinds.Child);
-                if (!string.IsNullOrEmpty(orderRule))
+                if (isGameObject)
+                {
+                    GameObjectRule(ref t, ref orderRule, ref isAry);
+                }
+                else if (!string.IsNullOrEmpty(orderRule))
                 {
                     orderRule = $".{orderRule}.{(isAry ? "ToArray" : "FirstOrDefault")}()";
                     isAry = true;
@@ -190,7 +197,11 @@ public sealed class RefMataGenerator : IIncrementalGenerator
             else if (isParent)
             {
                 kindHashSet.Add(RefMataKinds.Parent);
-                if (!string.IsNullOrEmpty(orderRule))
+                if (isGameObject)
+                {
+                    GameObjectRule(ref t, ref orderRule, ref isAry);
+                }
+                else if (!string.IsNullOrEmpty(orderRule))
                 {
                     orderRule = $".{orderRule}.{(isAry ? "ToArray" : "FirstOrDefault")}()";
                     isAry = true;
@@ -469,6 +480,22 @@ using {{Ns}};{{nsSb}}
                 ignore = false;
         }
         return ignore;
+    }
+
+    static void GameObjectRule(ref string t, ref string orderRule, ref bool isAry)
+    {
+        t = TransformDisp; // GameObject is can not 'GetComponent'.
+        if (!string.IsNullOrEmpty(orderRule))
+        {
+            orderRule = $".Select(x => x.gameObject).{orderRule}.{(isAry ? "ToArray" : "FirstOrDefault")}()";
+            isAry = true;
+        }
+        else
+        {
+            orderRule = isAry
+                ? ".Select(x => x.gameObject).ToArray()"
+                : ".gameObject";
+        }
     }
 
     static string PostAtr()
