@@ -227,13 +227,13 @@ public sealed class RefMataGenerator : IIncrementalGenerator
                 kindHashSet.Add(RefMataKinds.Load); // FIXME: このままでも良いかも
                 if (isAry)
                 {
-                    implSb.Append($$"""        foreach (var x in {{member.Name}}) (x as {{IReferenceable}})?.RunOnValidate(this);""");
+                    implSb.Append($$"""        foreach (var x in {{member.Name}}) (x as {{IReferenceable}})?.RunOnValidate({{(isComponent ? "this" : "root")}});""");
                     if (loadSb.Length > 0) loadSb.AppendLine();
                     loadSb.Append($$"""        foreach (var x in {{member.Name}}) (x as {{IReferenceable}})?.RunLoad();""");
                 }
                 else
                 {
-                    implSb.Append($$"""        ({{member.Name}} as {{IReferenceable}})?.RunOnValidate(this);""");
+                    implSb.Append($$"""        ({{member.Name}} as {{IReferenceable}})?.RunOnValidate({{(isComponent ? "this" : "root")}});""");
                     if (loadSb.Length > 0) loadSb.AppendLine();
                     loadSb.Append($$"""        ({{member.Name}} as {{IReferenceable}})?.RunLoad();""");
                 }
