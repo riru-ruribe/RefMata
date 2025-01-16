@@ -225,9 +225,18 @@ public sealed class RefMataGenerator : IIncrementalGenerator
             else if (isSerializeReference) // NOTE: prioritize other attributes.
             {
                 kindHashSet.Add(RefMataKinds.Load); // FIXME: このままでも良いかも
-                implSb.Append($$"""        ({{member.Name}} as {{IReferenceable}})?.RunOnValidate(this);""");
-                if (loadSb.Length > 0) loadSb.AppendLine();
-                loadSb.Append($$"""        ({{member.Name}} as {{IReferenceable}})?.RunLoad();""");
+                if (isAry)
+                {
+                    implSb.Append($$"""        foreach (var x in {{member.Name}}) (x as {{IReferenceable}})?.RunOnValidate(this);""");
+                    if (loadSb.Length > 0) loadSb.AppendLine();
+                    loadSb.Append($$"""        foreach (var x in {{member.Name}}) (x as {{IReferenceable}})?.RunLoad();""");
+                }
+                else
+                {
+                    implSb.Append($$"""        ({{member.Name}} as {{IReferenceable}})?.RunOnValidate(this);""");
+                    if (loadSb.Length > 0) loadSb.AppendLine();
+                    loadSb.Append($$"""        ({{member.Name}} as {{IReferenceable}})?.RunLoad();""");
+                }
             }
         }
 
